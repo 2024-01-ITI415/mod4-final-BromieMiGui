@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
@@ -41,6 +42,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
+
+        public Text keysText;
+        private int keysCount = 0;
 
         // Use this for initialization
         private void Start()
@@ -254,6 +258,38 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 return;
             }
             body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
+        }
+        private void OnTriggerEnter(Collider other)
+        {
+            // Check if the collider's GameObject has the "PickUp" tag
+            if (other.CompareTag("PickUp"))
+            {
+                // Deactivate the GameObject
+                other.gameObject.SetActive(false);
+                // Increase keys count
+                keysCount++;
+
+                // Update the UI Text with the new keys count
+                UpdateKeysText();
+                if (keysCount == 10)
+                {
+                    // Find all GameObjects with the tag "gate"
+                    GameObject[] gates = GameObject.FindGameObjectsWithTag("Gate");
+
+                    // Deactivate each gate
+                    foreach (GameObject gate in gates)
+                    {
+                        gate.SetActive(false);
+                    }
+                }
+            }
+        }
+        private void UpdateKeysText()
+        {
+            if (keysText != null)
+            {
+                keysText.text = "Keys: " + keysCount + "/10";
+            }
         }
     }
 }
