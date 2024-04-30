@@ -8,6 +8,8 @@ TagManager:
   - Loader
   - PickUp
   - Gate
+  - gate1
+  - gate2
   layers:
   - Default
   - TransparentFX

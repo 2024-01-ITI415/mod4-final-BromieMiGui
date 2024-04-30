@@ -42,7 +42,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
+        private bool gateOneDeactivated = false;
+        private bool gateTwoDeactivated = false;
 
+        public GameObject winText;
         public Text keysText;
         private int keysCount = 0;
 
@@ -271,6 +274,30 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
                 // Update the UI Text with the new keys count
                 UpdateKeysText();
+                if (keysCount == 4 && !gateOneDeactivated)
+                {
+                    // Find the GameObject with the tag "gate" and index 1
+                    GameObject gateOne = GameObject.FindGameObjectWithTag("gate1");
+
+                    // Deactivate gate one
+                    if (gateOne != null)
+                    {
+                        gateOne.SetActive(false);
+                        gateOneDeactivated = true; // Set the flag to true indicating gate one has been deactivated
+                    }
+                }
+                if (keysCount == 6 && !gateTwoDeactivated)
+                {
+                    // Find the GameObject with the tag "gate2"
+                    GameObject gateTwo = GameObject.FindGameObjectWithTag("gate2");
+
+                    // Deactivate gate two
+                    if (gateTwo != null)
+                    {
+                        gateTwo.SetActive(false);
+                        gateTwoDeactivated = true; // Set the flag to true indicating gate two has been deactivated
+                    }
+                }
                 if (keysCount == 10)
                 {
                     // Find all GameObjects with the tag "gate"
@@ -280,6 +307,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     foreach (GameObject gate in gates)
                     {
                         gate.SetActive(false);
+                    }
+                }
+                if (keysCount == 11)
+                {
+                    // Activate the winText GameObject
+                    if (winText != null)
+                    {
+                        winText.SetActive(true);
                     }
                 }
             }
